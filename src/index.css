@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'Drowner';
+  src: url('./assets/fonts/Drowner-Regular.otf') format('opentype'); 
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./assets/fonts/Satoshi-Regular.otf') format('opentype');
+  font-weight: 400; 
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./assets/fonts/Satoshi-Light.otf') format('opentype');
+  font-weight: 300; 
+  font-style: normal;
+}
+
+body {
+  background-color: #F9F6F2;
+  color: #111111;
+  overflow-x: hidden;
+
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
