@@ -33,17 +33,17 @@ export default function BagPacker() {
         
         <div className="text-center mb-8 relative z-30">
           <h2 className="font-serif text-4xl md:text-5xl text-bseth-brown mb-2">
-            Ingeniería de Espacio
+            ¿Qué entra en un bolso de Bseth?
           </h2>
           <p className="text-base md:text-lg font-sans text-bseth-black max-w-lg mx-auto opacity-80">
-            Capacidad pensada al milímetro.
+            pensamos en tu comodidad
           </p>
         </div>
 
 
         <div className="relative w-full max-w-4xl flex items-center justify-center h-[400px]">
 
-            {/* OBJETOS (Tamaños reducidos: text-6xl en lugar de 9xl) */}
+            {/* objetos */}
             <motion.div style={{ x: bookX, y: bookY, scale: bookScale }} className="absolute z-20 pointer-events-none">
                 <span className="text-6xl drop-shadow-md">📚</span>
             </motion.div>

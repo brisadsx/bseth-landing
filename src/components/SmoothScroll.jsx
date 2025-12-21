@@ -3,15 +3,15 @@ import Lenis from 'lenis';
 
 export default function SmoothScroll({ children }) {
   useEffect(() => {
-    // Configuración "Mantequilla"
+    
     const lenis = new Lenis({
-      duration: 1.2, // Cuánto tarda en frenar (más alto = más suave)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Matemáticas de fluidez
+      duration: 1.2, 
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
       smoothWheel: true,
-      touchMultiplier: 2, // Mejor control en celular
+      touchMultiplier: 2, // mejor control en celu
     });
 
-    // El motor que actualiza el scroll en cada frame
+    // motor de animación
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -19,7 +19,7 @@ export default function SmoothScroll({ children }) {
 
     requestAnimationFrame(raf);
 
-    // Limpieza cuando sales de la web
+    // limpieza
     return () => {
       lenis.destroy();
     };

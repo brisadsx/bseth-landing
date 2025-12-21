@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// IMPORTA TUS 8 FOTOS AQUÍ (Asegúrate de tenerlas en assets)
 
 import bag1 from "../assets/bolso1loader.png"; 
 import bag2 from "../assets/bolso2loader.png";
