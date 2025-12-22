@@ -35,12 +35,12 @@ export default function Narrative() {
       
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden px-6">
         
-        <span className="font-helvetica text-xs tracking-[0.0em] text-bseth-rose mb-8 opacity-80">
+        <span className="font-satoshi text-xs tracking-[0.0em] text-bseth-rose mb-8 opacity-80">
             nuestra filosofía
         </span>
 
         {/* flex wrap */}
-        <p className="max-w-4xl text-xl md:text-5xl font-helvetica leading-tight text-center flex flex-wrap justify-center gap-x-[0.3em]">
+        <p className="max-w-4xl text-xl md:text-5xl font-satoshi leading-tight text-center flex flex-wrap justify-center gap-x-[0.3em]">
           
           {words.map((word, wordIndex) => {
             return (

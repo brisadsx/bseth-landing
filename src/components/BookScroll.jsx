@@ -1,16 +1,22 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-// componente para cada página que gira
-const Page = ({ scrollYProgress, range, frontContent, backContent, zIndex }) => {
+// imgenes
+import imgPortada from "../assets/portadabseth.webp";         // 1. tapa
+import imgComoNacio from "../assets/interior_izqbseth.webp"; // 2. izq 1
+import imgQueBuscamos from "../assets/interior_derbseth.webp"; // 3. der 1
+import imgQuienesSomos from "../assets/interior_iz2bseth.webp"; // 4. izq 2
+import imgCierre from "../assets/interior_der2bseth.webp";       // 5. der 2
+import imgContraportada from "../assets/contraportada.webp";  // 6. contra
+
+
+const Sheet = ({ scrollYProgress, range, frontImg, backImg, zIndexStart, zIndexEnd }) => {
   const rotate = useTransform(scrollYProgress, range, [0, -180]);
-  const z = useTransform(scrollYProgress, range, [zIndex, 0]);
   
-  // sombras dinámicas
+  const z = useTransform(scrollYProgress, range, [zIndexStart, zIndexEnd]);
+
   const progress = useTransform(scrollYProgress, range, [0, 1]);
-  // sombra más sutil 
-  const curlShadow = useTransform(progress, [0, 0.5, 1], [0, 0.3, 0]);
-  const spineLight = useTransform(progress, [0, 0.2], [0, 0.4]);
+  const shadowOpacity = useTransform(progress, [0, 0.5, 1], [0, 0.2, 0]);
 
   return (
     <motion.div
@@ -20,34 +26,25 @@ const Page = ({ scrollYProgress, range, frontContent, backContent, zIndex }) => 
         transformStyle: "preserve-3d", 
         transformOrigin: "left center" 
       }}
-      className="absolute top-0 right-0 w-[50%] h-full bg-[#F8F8F6] shadow-md overflow-hidden"
+      className="absolute top-0 right-0 w-[50%] h-full bg-bseth-cream" 
     >
-      {/* --- cara frontal (derecha) --- */}
-      <div 
-        className="absolute inset-0 flex flex-col" 
-        style={{ backfaceVisibility: 'hidden' }}
-      >
-        {/* sombra interna(siempre presente) */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/10 to-transparent pointer-events-none z-10" />
-        
-        {/* sombras dinámicas al girar */}
-        <motion.div style={{ opacity: curlShadow }} className="absolute right-0 top-0 bottom-0 w-1/4 bg-gradient-to-l from-black/20 to-transparent pointer-events-none z-20" />
-        <motion.div style={{ opacity: spineLight }} className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-white/50 to-transparent pointer-events-none z-20" />
-        
-        <div className="relative z-0 h-full p-8 md:p-12">{frontContent}</div>
+      {/* --- frente --- */}
+      <div className="absolute inset-0 w-full h-full bg-bseth-cream" style={{ backfaceVisibility: 'hidden' }}>
+        {/* Sombra interna del lomo */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/10 to-transparent z-10 pointer-events-none"/>
+        <motion.div style={{ opacity: shadowOpacity }} className="absolute inset-0 bg-black pointer-events-none z-20" />
+        <img src={frontImg} alt="frente" className="w-full h-full object-contain" />
       </div>
 
-      {/* cara trasera */}
+      {/* --- dorso --- */}
       <div 
-        className="absolute inset-0 bg-[#F8F8F6] flex flex-col"
+        className="absolute inset-0 w-full h-full bg-bseth-cream"
         style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
       >
-         {/* sombra interna (lado derecho ahora) */}
-         <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/10 to-transparent pointer-events-none z-10" />
-         {/* sombra general al pasar */}
-         <motion.div style={{ opacity: curlShadow }} className="absolute inset-0 bg-black/10 pointer-events-none z-20" />
-         
-         <div className="relative z-0 h-full p-8 md:p-12">{backContent}</div>
+        {/* sombra */}
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/10 to-transparent z-10 pointer-events-none"/>
+        <motion.div style={{ opacity: shadowOpacity }} className="absolute inset-0 bg-black pointer-events-none z-20" />
+        <img src={backImg} alt="dorso" className="w-full h-full object-contain" />
       </div>
     </motion.div>
   );
@@ -60,69 +57,52 @@ export default function BookScroll() {
     offset: ["start start", "end end"]
   });
 
-  const paperColor = "bg-[#F8F8F6]";
+  const xPosition = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], ["-25%", "0%", "0%", "25%"]);
+
+  const bookShadowOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[600vh] bg-bseth-brown">
+    <section ref={containerRef} className="relative h-[900vh] bg-bseth-brown">
       
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden perspective-[2000px]">
         
-        {/* --- estructura de la revista (base) --- */}
-        <div className={`relative w-[95vw] md:w-[960px] h-[60vh] md:h-[85vh] flex shadow-[0_20px_40px_rgba(0,0,0,0.3)] ${paperColor}`}>
-          
-          {/* 1. página izquierda  */}
-          <div className="w-1/2 h-full relative overflow-hidden">
-             <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/15 to-transparent pointer-events-none z-10"></div>
-             {/* contenido de la izquierda */}
-             <div className="h-full p-10 md:p-14 relative z-0">
-                {/* agregar aca */}
-             </div>
-          </div>
-          
-          {/* 2. página derecha */}
-          <div className="w-1/2 h-full relative overflow-hidden">
-             <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black/15 to-transparent pointer-events-none z-10"></div>
-             
-             {/* contenido de la derecha */}
-             <div className="h-full p-10 md:p-14 relative z-0 flex flex-col justify-end items-end">
-                {/* agregar aca */}
-                <span className="font-sans text-[10px] text-gray-400 tracking-widest uppercase">Fin Volumen I</span>
-             </div>
-          </div>
-
-          {/* --- páginas que giran--- */}
-
-          {/* pag2 */}
-          <Page scrollYProgress={scrollYProgress} range={[0.4, 0.7]} zIndex={30}
-            frontContent={
-               
-                <div className="h-full relative border-dashed border-2 border-gray-200 flex items-center justify-center text-gray-300">
-                    cont frente 2
-                </div>
-            }
-            backContent={
-                
-                <div className="h-full relative border-dashed border-2 border-gray-200 flex items-center justify-center text-gray-300">
-                    cont dorso 2
-                </div>
-            }
+        <motion.div 
+            style={{ x: xPosition }}
+            className="relative w-[90vw] md:w-[900px] h-[60vh] md:h-[85vh] flex justify-center items-center"
+        >
+          <motion.div 
+            style={{ opacity: bookShadowOpacity }}
+            className="absolute top-2 w-[98%] h-[98%] shadow-[0_30px_60px_rgba(0,0,0,0.4)] bg-white/5 rounded-sm"
           />
 
-          {/* portada */}
-          <Page scrollYProgress={scrollYProgress} range={[0, 0.3]} zIndex={40}
-            frontContent={
-                <div className="h-full relative border-dashed border-2 border-gray-200 flex items-center justify-center text-gray-300">
-                    titulo portada
-                </div>
-            }
-            backContent={
-                <div className="h-full relative border-dashed border-2 border-gray-200 flex items-center justify-center text-gray-300">
-                    contraportada
-                </div>
-            }
+          <Sheet 
+            scrollYProgress={scrollYProgress} 
+            range={[0.65, 0.90]} 
+            zIndexStart={10} 
+            zIndexEnd={30}    
+            frontImg={imgCierre}
+            backImg={imgContraportada}
           />
 
-        </div>
+          <Sheet 
+            scrollYProgress={scrollYProgress} 
+            range={[0.35, 0.60]}  // Gira en el medio
+            zIndexStart={20} 
+            zIndexEnd={20} 
+            frontImg={imgQueBuscamos}
+            backImg={imgQuienesSomos}
+          />
+          
+          <Sheet 
+            scrollYProgress={scrollYProgress} 
+            range={[0.05, 0.30]}  // Gira primero
+            zIndexStart={30} 
+            zIndexEnd={10} 
+            frontImg={imgPortada}
+            backImg={imgComoNacio}
+          />
+
+        </motion.div>
       </div>
     </section>
   );
