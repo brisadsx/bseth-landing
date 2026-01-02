@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 import SmoothScroll from './components/SmoothScroll';
@@ -9,7 +9,6 @@ import DecryptedText from './components/DecryptedText';
 import Loader from './components/Loader'; 
 
 import bsethLogo from './assets/lgbseth.png'; 
-
 
 import bag1 from "./assets/bolso1loader.png";
 import bag2 from "./assets/bolso2loader.png";
@@ -56,8 +55,16 @@ const ShootingBag = ({ img, index }) => {
 function App() {
   const [loading, setLoading] = useState(true);
 
-  const { scrollY } = useScroll();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000); 
 
+    return () => clearTimeout(timer); 
+  }, []);
+  // -------------------------------------
+
+  const { scrollY } = useScroll();
   const flyUp = useTransform(scrollY, [0, 500], ["0%", "-150%"]);
   
   const fadeIn = {
@@ -68,7 +75,8 @@ function App() {
   return (
     <>
       <AnimatePresence mode='wait'>
-        {loading && <Loader key="loader" onComplete={() => setLoading(false)} />}
+        
+        {loading && <Loader key="loader" />} 
       </AnimatePresence>
 
       {!loading && (
@@ -122,7 +130,7 @@ function App() {
                   </span>
                 </div>
 
-                <div className="text-xl md:text-xl font-satoshi text-bseth-brown opacity-70 mb-4">
+                <div className="text-xl md:text-xl font-satoshi text-bseth-brown mb-4">
                     <DecryptedText text="Lisbeth & Brisa" />
                 </div>
 
