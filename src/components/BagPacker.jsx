@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-// --- TUS IMÁGENES ---
 import bolsoGrandeImg from "../assets/molde1.png"; 
 import bolsoChicoImg from "../assets/molde2.png";  
 
@@ -17,9 +16,9 @@ import imgTablet from "../assets/tablet.png";
 import imgCuaderno from "../assets/cuaderno.png";
 import imgCamara from "../assets/camara.png";
 
-// --- DATOS ---
+
 const ITEMS_DATA = [
-  // --- BOLSO 1 (Grande - Izquierda) ---
+  
   { id: 1,  img: imgLaptop,      name: "notebook",        targetBag: 1, startX: "-12vw", startY: "-60vh" }, 
   { id: 2,  img: imgLibro,       name: "libro de diseño", targetBag: 1, startX: "-18vw", startY: "-50vh" },
   { id: 3,  img: imgBotella,     name: "botella de agua", targetBag: 1, startX: "-8vw",  startY: "-45vh" },
@@ -32,7 +31,7 @@ const ITEMS_DATA = [
   { id: 14, img: imgLlaves,      name: "llaves de casa",  targetBag: 1, startX: "-12vw", startY: "-30vh" },
   { id: 16, img: imgCamara,      name: "cámara digital",  targetBag: 1, startX: "-9vw",  startY: "-50vh" },
 
-  // --- BOLSO 2 (Chico - Derecha) ---
+  
   { id: 7,  img: imgLlaves,      name: "llaves",          targetBag: 2, startX: "10vw",  startY: "-50vh" },
   { id: 8,  img: imgLentes,      name: "lentes",          targetBag: 2, startX: "15vw",  startY: "-40vh" },   
   { id: 9,  img: imgCelular,     name: "iphone",          targetBag: 2, startX: "8vw",   startY: "-60vh" },
@@ -40,7 +39,7 @@ const ITEMS_DATA = [
   { id: 15, img: imgCamara,      name: "cámara compacta", targetBag: 2, startX: "18vw",  startY: "-55vh" }, 
 ];
 
-// --- 1. COMPONENTE INDIVIDUAL DE LA LISTA ---
+
 const ListItem = ({ item, scrollYProgress, align }) => {
   const globalIndex = ITEMS_DATA.findIndex(i => i.id === item.id);
   const trigger = 0.15 + (globalIndex * 0.03); 
@@ -57,7 +56,7 @@ const ListItem = ({ item, scrollYProgress, align }) => {
   );
 };
 
-// --- 2. LISTA (Contenedor) ---
+
 const ItemList = ({ items, scrollYProgress, align }) => {
   return (
     <div className={`flex flex-col gap-0.5 ${align === "left" ? "text-right items-end" : "text-left items-start"}`}>
@@ -73,10 +72,10 @@ const ItemList = ({ items, scrollYProgress, align }) => {
   );
 };
 
-// --- 3. OBJETO VOLADOR ---
+
 const FlyingObject = ({ item, scrollYProgress }) => {
   const targetCoords = {
-    1: { x: "-15vw", y: "8vh" }, // Ajustado un poco más afuera por el ancho nuevo
+    1: { x: "-15vw", y: "8vh" }, 
     2: { x: "15vw", y: "12vh" }, 
   };
 
@@ -106,7 +105,7 @@ const FlyingObject = ({ item, scrollYProgress }) => {
   );
 };
 
-// --- COMPONENTE PRINCIPAL ---
+
 export default function BagPacker() {
   const containerRef = useRef(null);
   
@@ -120,7 +119,7 @@ export default function BagPacker() {
       
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4">
         
-        {/* Título: Lo subí un poco más (top-8) para dar espacio */}
+        {/* titulo */}
         <div className="absolute top-8 md:top-16 z-40 text-center w-full">
           <h2 className="font-serif text-3xl md:text-5xl text-bseth-cream mb-2 mix-blend-overlay opacity-90 lowercase">
             modelos pensados para vos
@@ -130,13 +129,9 @@ export default function BagPacker() {
           </p>
         </div>
 
-        {/* --- ESCENARIO PRINCIPAL --- */}
-        {/* CAMBIO 1: max-w-6xl para dar más ancho total y evitar colisión */}
-        {/* CAMBIO 2: mt-0 (quitamos mt-20) para subir todo el bloque */}
+        {/* --- esc principal --- */}
         <div className="relative w-full max-w-6xl flex items-center justify-center h-[60vh] mt-0 gap-4 md:gap-8">
 
-            {/* COLUMNA IZQ: Lista Bolso 1 */}
-            {/* CAMBIO 3: pr-12 para empujar el texto a la izquierda, lejos del bolso */}
             <div className="w-1/3 hidden md:flex flex-col justify-center h-full pr-12">
                <ItemList 
                   items={ITEMS_DATA.filter(i => i.targetBag === 1)} 
@@ -145,7 +140,6 @@ export default function BagPacker() {
                />
             </div>
 
-            {/* COLUMNA CENTRAL: Bolsos */}
             <div className="relative w-1/3 flex items-center justify-center h-full">
                 
                 {ITEMS_DATA.map((item) => (
@@ -156,8 +150,6 @@ export default function BagPacker() {
                   />
                 ))}
 
-                {/* Bolsos Flotantes */}
-                {/* Ajusté translate-y para que estén centrados verticalmente con el nuevo layout */}
                 <div className="relative z-10 flex gap-8 md:gap-16 items-end translate-y-10">
                     <motion.img 
                         src={bolsoGrandeImg} 
@@ -177,8 +169,6 @@ export default function BagPacker() {
                 </div>
             </div>
 
-            {/* COLUMNA DER: Lista Bolso 2 */}
-            {/* CAMBIO 4: pl-12 para empujar el texto a la derecha, lejos del bolso chico */}
             <div className="w-1/3 hidden md:flex flex-col justify-center h-full pl-12">
                <ItemList 
                   items={ITEMS_DATA.filter(i => i.targetBag === 2)} 
