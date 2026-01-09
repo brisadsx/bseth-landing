@@ -84,7 +84,7 @@ function App() {
           <div className="bg-bseth-brown min-h-screen font-sans w-full text-bseth-cream selection:bg-bseth-rose selection:text-bseth-black">
             
             {/* hero */}
-            <section className="h-screen w-full relative flex flex-col justify-center items-center text-center bg-bseth-black overflow-hidden px-4">
+            <section className="h-screen w-full relative flex flex-col justify-center items-center text-center bg-bseth-brown overflow-hidden px-4">
 
               {/* luz central */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[100px] pointer-events-none">
@@ -130,7 +130,7 @@ function App() {
                   </span>
                 </div>
 
-                <div className="text-xl md:text-xl font-satoshi text-bseth-brown mb-4">
+                <div className="text-xl md:text-xl font-satoshi text-bseth-rose mb-4">
                     <DecryptedText text="Lisbeth & Brisa" />
                 </div>
 
@@ -154,11 +154,11 @@ function App() {
             {/* footer */}
             <section className="min-h-screen w-full bg-bseth-black flex flex-col items-center justify-center text-center text-bseth-cream p-6 relative z-20 border-t border-white/10">
               <h2 className="text-6xl md:text-9xl font-drowner mb-10 text-bseth-cream">gracias!</h2>
-              <div className="max-w-2xl text-lg md:text-2xl mb-16 px-4 font-sans font-light opacity-80 leading-relaxed">
-                <p className="mb-6">"lorem ipsum adiakjsdjakjsd"</p>
+              <div className="max-w-2xl text-lg md:text-2xl mb-16 px-4 font-helvetica font-light opacity-80 leading-relaxed">
+                <p className="mb-6">estamos transformando tu feedback en diseño real. gracias por sumar tu visión y ser parte de este proceso. lo mejor está por llegar.</p>
               </div>
-              <button onClick={() => window.location.href = "https://tu-tienda-ecommerce.com"} className="group relative bg-bseth-rose text-bseth-black px-16 py-6 rounded-full text-xl md:text-2xl font-bold overflow-hidden transition-transform hover:scale-105">
-                <span className="relative z-10 font-drowner tracking-wide">ir a la tienda</span>
+              <button onClick={() => window.location.href = "https://bseth.tiendanegocio.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnP_SuN94d1XkzokX99ydHNwYWIosYqDdBtjpVE9Dv3cKLznKGIkP5fAn-5IA_aem_4Hoi6Bu_T2c5qAPP-xriNQ"} className="group relative bg-bseth-rose text-bseth-black px-16 py-6 rounded-full text-xl md:text-2xl overflow-hidden transition-transform hover:scale-105">
+                <span className="relative z-10 font-helvetica tracking-tighter">ir a la tienda</span>
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
               </button>
               <p className="absolute bottom-4 text-[10px] opacity-20 font-sans">© 2025 Bseth</p>

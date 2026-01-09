@@ -62,7 +62,7 @@ export default function BookScroll() {
   const bookShadowOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
   return (
-    <section ref={containerRef} className="relative h-[900vh] bg-bseth-brown">
+    <section ref={containerRef} className="relative h-[900vh] bg-bseth-cream">
       
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden perspective-[2000px]">
         

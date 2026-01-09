@@ -1,76 +1,194 @@
-import { useRef } from "react";
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useRef, useEffect } from "react";
 
-// texto de la historia
-const STORY_TEXT = "En Bseth entendemos el diseño como un proceso que se construye con tiempo, escucha y prueba. Diseñamos bolsos pensados para el uso cotidiano, buscando equilibrio entre funcionalidad, orden y estilo. Nos interesa crear productos que acompañen distintos ritmos y momentos, prestando atención a los detalles y a cómo se usan en el día a día.";
-
-const Char = ({ children, progress, range }) => {
-  const opacity = useTransform(progress, range, [0.1, 1]);
-  const color = useTransform(progress, range, ["#080808ff", "#FDFBF7"]); 
-  
-  return (
-    <motion.span style={{ opacity, color }} className="relative">
-      {children}
-    </motion.span>
-  );
-};
+// --- TUS FOTOS ---
+import imgLisbeth from "../assets/lis.webp";
+import imgLisbeth2 from "../assets/lis2.jpg";
+import imgLisbeth3 from "../assets/lis3.jpg";
+import imgLisbeth4 from "../assets/lis4.jpg";
+import videoBrisa from "../assets/videobrisa.mp4"; 
+import imgBrisa1 from "../assets/brisa.webp";
+import imgBrisa2 from "../assets/brisa2.webp";
+import imgBrisa3 from "../assets/brisa3.jpg";
 
 export default function Narrative() {
   const containerRef = useRef(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 0.8", "end 0.8"] 
-  });
+  const videoRef = useRef(null);
 
-  const words = STORY_TEXT.split(" ");
-  
-  const totalChars = STORY_TEXT.length;
-  const step = 1 / totalChars;
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 
+            if ('requestIdleCallback' in window) {
+              window.requestIdleCallback(() => {
+                videoRef.current?.play().catch(() => {});
+              });
+            } else {
+              // fallback
+              setTimeout(() => {
+                videoRef.current?.play().catch(() => {});
+              }, 200);
+            }
+          } else {
+            videoRef.current?.pause();
+          }
+        });
+      },
+      { threshold: 0.1 } 
+    );
 
-  let globalCharIndex = 0;
+    if (videoRef.current) observer.observe(videoRef.current);
+    
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section ref={containerRef} className="relative h-[200vh] bg-bseth-black">
+    <section 
+      ref={containerRef} 
+      className="w-full min-h-screen bg-[#EBE5CE] flex flex-col justify-center items-center overflow-hidden py-8 
+                 [content-visibility:auto] [contain-intrinsic-size:1px_100vh] will-change-transform backface-hidden"
+    >
       
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden px-6">
+      {/* cont fluido */}
+      <div className="w-[95vw] max-w-[1360px] transform-gpu">
         
-        <span className="font-satoshi text-xs tracking-[0.0em] text-bseth-rose mb-8 opacity-80">
-            nuestra filosofía
-        </span>
+        {/* header */}
+        <div className="flex justify-between items-center text-[9px] font-bold tracking-[0.2em] text-black/40 mb-6 border-b border-black/5 pb-2 uppercase font-sans">
+            <span>Page 01</span>
+            <span className="w-8"></span> 
+            <span>Page 02</span>
+        </div>
 
-        {/* flex wrap */}
-        <p className="max-w-4xl text-xl md:text-5xl font-satoshi leading-tight text-center flex flex-wrap justify-center gap-x-[0.3em]">
-          
-          {words.map((word, wordIndex) => {
-            return (
-              <span key={wordIndex} className="whitespace-nowrap">
-                {word.split("").map((char, charIndex) => {
-                  
-                  const start = globalCharIndex * step;
-                  const end = start + step;
-                  globalCharIndex++; 
+        {/* grilla maestra */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start relative">
 
-                  return (
-                    <Char key={charIndex} progress={scrollYProgress} range={[start, end]}>
-                      {char}
-                    </Char>
-                  );
-                })}
+            {/* pliegue central */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-black/5 hidden md:block -translate-x-1/2" />
+
+            {/* ============================================== */}
+            {/* pág izq */}
+            {/* ============================================== */}
+            <div className="grid grid-cols-2 gap-3 px-2 md:px-8">
                 
-                {(() => { globalCharIndex++; return null; })()}
-              </span>
-            );
-          })}
-          
-          {/* cursor parpadeante */}
-          <motion.span 
-            className="inline-block w-1 h-8 md:h-12 bg-bseth-rose ml-1 align-middle"
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
-          />
-        </p>
+                {/* columna 1 */}
+                <div className="flex flex-col gap-3 pt-6">
+                    <div className="w-full aspect-[2/3] relative bg-[#E5E0C8]">
+                        <img 
+                            src={imgLisbeth3} 
+                            alt="mood main" 
+                            className="absolute inset-0 w-full h-full object-cover" 
+                            loading="lazy" 
+                            decoding="async" 
+                        />
+                    </div>
+                    
+                    <div className="w-[85%] aspect-[3/4] relative self-center bg-[#E5E0C8]">
+                         <img 
+                            src={imgLisbeth2} 
+                            alt="mood detail" 
+                            className="absolute inset-0 w-full h-full object-cover" 
+                            loading="lazy" 
+                            decoding="async"
+                         />
+                    </div>
+                </div>
 
+                {/* columna 2 */}
+                <div className="flex flex-col gap-3">
+                    <div className="w-full aspect-square relative bg-[#E5E0C8]">
+                        <img 
+                            src={imgLisbeth4} 
+                            alt="texture" 
+                            className="absolute inset-0 w-full h-full object-cover" 
+                            loading="lazy" 
+                            decoding="async"
+                        />
+                    </div>
+                    
+                    <div className="w-full aspect-[4/3] relative bg-[#E5E0C8]">
+                        <img 
+                            src={imgLisbeth} 
+                            alt="texture detail" 
+                            className="absolute inset-0 w-full h-full object-cover" 
+                            loading="lazy" 
+                            decoding="async"
+                        />
+                    </div>
+
+                    {/* TEXTO */}
+                    <div className="mt-4 pt-2 border-t border-black/10">
+                        <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">lisbeth</h4>
+                        <p className="text-[13px] leading-[1.4] text-justify text-black/90 font-helvetica tracking-tight">
+                            ama el gimnasio
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            {/* ============================================== */}
+            {/* PÁGINA DERECHA */}
+            {/* ============================================== */}
+            <div className="grid grid-cols-12 gap-3 content-start px-2 md:px-8">
+                
+                {/* BLOQUE SUPERIOR */}
+                <div className="col-span-7 col-start-1 aspect-[4/5] relative bg-[#E5E0C8]">
+                    <img 
+                        src={imgBrisa1} 
+                        alt="brisa main" 
+                        className="absolute inset-0 w-full h-full object-cover" 
+                        loading="lazy" 
+                        decoding="async"
+                    />
+                </div>
+                
+                <div className="col-span-5 flex flex-col justify-end pb-2 pl-3">
+                    <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">brisa</h4>
+                    <p className="text-[13px] leading-[1.4] text-left text-black/90 font-helvetica tracking-tight">
+                       estudiante de ingeniería informática, artista y diseñadora. transformo ideas complejas en interfaces visuales. construyo software y experiencias digitales impulsada por la curiosidad, el buen diseño y la funcionalidad. <p>amo leer, amo la música, amo el arte, amo la moda, amo el amor, amo el conocimiento</p> 
+                    </p>
+                </div>
+
+                {/* BLOQUE MEDIO: VIDEO OPTIMIZADO */}
+                <div className="col-span-12 flex justify-end py-2">
+                     <div className="w-[60%] aspect-[16/9] relative bg-[#E5E0C8]">
+                        <video 
+                            ref={videoRef}
+                            src={videoBrisa} 
+                            muted 
+                            loop 
+                            playsInline 
+                            preload="none" // No descarga nada hasta que sea visible
+                            className="absolute inset-0 w-full h-full object-cover" 
+                        />
+                     </div>
+                </div>
+
+                {/* BLOQUE INFERIOR */}
+                <div className="col-span-6 aspect-[4/3] relative mt-1 bg-[#E5E0C8]">
+                    <img 
+                        src={imgBrisa2} 
+                        alt="street style" 
+                        className="absolute inset-0 w-full h-full object-cover" 
+                        loading="lazy" 
+                        decoding="async"
+                    />
+                </div>
+                
+                <div className="col-span-6 aspect-[3/4] relative mt-1 bg-[#E5E0C8]">
+                    <img 
+                        src={imgBrisa3} 
+                        alt="full body" 
+                        className="absolute inset-0 w-full h-full object-cover" 
+                        loading="lazy" 
+                        decoding="async"
+                    />
+                </div>
+
+            </div>
+
+        </div>
       </div>
     </section>
   );
