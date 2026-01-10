@@ -54,7 +54,7 @@ export default function Narrative() {
       <div className="w-[95vw] max-w-[1360px] transform-gpu">
         
         {/* header */}
-        <div className="flex justify-between items-center text-[9px] font-bold tracking-[0.2em] text-black/40 mb-6 border-b border-black/5 pb-2 uppercase font-sans">
+        <div className="flex justify-between items-center text-[9px] font-helvetica tracking-[0.2em] text-black/40 mb-6 border-b border-black/5 pb-2 uppercase font-sans">
             <span>Page 01</span>
             <span className="w-8"></span> 
             <span>Page 02</span>
@@ -119,8 +119,8 @@ export default function Narrative() {
                     {/* TEXTO */}
                     <div className="mt-4 pt-2 border-t border-black/10">
                         <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">lisbeth</h4>
-                        <p className="text-[13px] leading-[1.4] text-justify text-black/90 font-helvetica tracking-tight">
-                            ama el gimnasio
+                        <p className="text-[13px] leading-[1.4] text-black/90 font-helvetica tracking-tight">
+                            <map name=""></map>me gusta decir ‘lis con L’ cuando voy a starbucks, también me gusta decir ‘quispe con Q’ cuando tengo que renovar la cuota del gym, pero también me gusta que me digan ‘teacher! toilet please’
                         </p>
                     </div>
                 </div>
@@ -145,8 +145,8 @@ export default function Narrative() {
                 
                 <div className="col-span-5 flex flex-col justify-end pb-2 pl-3">
                     <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">brisa</h4>
-                    <p className="text-[13px] leading-[1.4] text-left text-black/90 font-helvetica tracking-tight">
-                       estudiante de ingeniería informática, artista y diseñadora. transformo ideas complejas en interfaces visuales. construyo software y experiencias digitales impulsada por la curiosidad, el buen diseño y la funcionalidad. <p>amo leer, amo la música, amo el arte, amo la moda, amo el amor, amo el conocimiento</p> 
+                    <p className="text-[13px] leading-[1.4] text-left text-black/80 font-helvetica tracking-tight">
+                       amo leer, amo la música, amo el arte, amo la moda, amo el amor, amo el conocimiento y a los animales.<p>estudio ingeniería informática, construyo software y experiencias digitales impulsadas por la curiosidad, la creatividad y la funcionalidad.</p> 
                     </p>
                 </div>
 

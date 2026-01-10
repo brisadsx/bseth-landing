@@ -54,13 +54,50 @@ const ShootingBag = ({ img, index }) => {
 
 function App() {
   const [loading, setLoading] = useState(true);
+  
+  // ESTADO PARA EL CARTELITO RANDOM
+  const [randomStyle, setRandomStyle] = useState(null);
 
   useEffect(() => {
+    // 1. Loader Logic
     const timer = setTimeout(() => {
       setLoading(false);
     }, 3000); 
 
-    return () => clearTimeout(timer); 
+    // 2. Random Badge Logic (INTERVALO CONSTANTE)
+    const colors = [
+        { bg: "bg-[#C8A6A0]", text: "text-[#ECE4CE]" }, // Rose + Sand
+        { bg: "bg-[#8E9F6C]", text: "text-[#ECE4CE]" }, // Olive + Sand
+        { bg: "bg-[#ECE4CE]", text: "text-[#111111]" }, // Sand + Black
+        { bg: "bg-[#BAAD93]", text: "text-[#111111]" }, // Beige + Black
+    ];
+
+    const positions = [
+        { x: -75, y: -45, r: -5 }, // Arriba Izquierda
+        { x: 75, y: -45, r: 5 },   // Arriba Derecha
+        { x: 0, y: -60, r: 0 },    // Arriba Centro
+        { x: 85, y: 15, r: -8 },   // Abajo Derecha
+        { x: -85, y: 15, r: 8 },   // Abajo Izquierda
+    ];
+
+    // Función para cambiar estilo
+    const changeStyle = () => {
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const randomPos = positions[Math.floor(Math.random() * positions.length)];
+        // Agregamos un ID único (timestamp) para forzar la re-animación
+        setRandomStyle({ ...randomColor, ...randomPos, id: Date.now() });
+    };
+
+    // Ejecutar inmediatamente
+    changeStyle();
+
+    // Ejecutar cada 2.5 segundos (puedes cambiar 2500 por 3000 si lo quieres más lento)
+    const interval = setInterval(changeStyle, 2500);
+
+    return () => {
+        clearTimeout(timer);
+        clearInterval(interval); // Limpiamos el intervalo al salir
+    }; 
   }, []);
   // -------------------------------------
 
@@ -75,7 +112,6 @@ function App() {
   return (
     <>
       <AnimatePresence mode='wait'>
-        
         {loading && <Loader key="loader" />} 
       </AnimatePresence>
 
@@ -154,14 +190,68 @@ function App() {
             {/* footer */}
             <section className="min-h-screen w-full bg-bseth-black flex flex-col items-center justify-center text-center text-bseth-cream p-6 relative z-20 border-t border-white/10">
               <h2 className="text-6xl md:text-9xl font-drowner mb-10 text-bseth-cream">gracias!</h2>
-              <div className="max-w-2xl text-lg md:text-2xl mb-16 px-4 font-helvetica font-light opacity-80 leading-relaxed">
-                <p className="mb-6">estamos transformando tu feedback en diseño real. gracias por sumar tu visión y ser parte de este proceso. lo mejor está por llegar.</p>
+              
+              <div className="max-w-2xl text-lg md:text-2xl mb-16 px-4 font-helvetica opacity-80 flex-col gap-1">
+                <p className="m-0 tracking-tight leading-tighter">esto es solo el inicio de un proyecto</p>
+                <p className="m-0 tracking-tight leading-tighter">pensado para acompañarte</p>
               </div>
-              <button onClick={() => window.location.href = "https://bseth.tiendanegocio.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnP_SuN94d1XkzokX99ydHNwYWIosYqDdBtjpVE9Dv3cKLznKGIkP5fAn-5IA_aem_4Hoi6Bu_T2c5qAPP-xriNQ"} className="group relative bg-bseth-rose text-bseth-black px-16 py-6 rounded-full text-xl md:text-2xl overflow-hidden transition-transform hover:scale-105">
-                <span className="relative z-10 font-helvetica tracking-tighter">ir a la tienda</span>
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-              </button>
-              <p className="absolute bottom-4 text-[10px] opacity-20 font-sans">© 2025 Bseth</p>
+              
+              {/* cont icons */}
+              <div className="relative flex gap-8 mt-10 items-center justify-center">
+
+                  {randomStyle && (
+                    <motion.div
+                        key={randomStyle.id} 
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ 
+                            scale: 1, 
+                            opacity: 1, 
+                            x: randomStyle.x, 
+                            y: randomStyle.y, 
+                            rotate: randomStyle.r 
+                        }}
+                        
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                        className={`absolute z-30 px-3 py-1.5 ${randomStyle.bg} ${randomStyle.text} font-helvetica text-xs font-medium lowercase tracking-tighter rounded-full shadow-lg pointer-events-none whitespace-nowrap`}
+                    >
+                        seguinos!
+                    </motion.div>
+                  )}
+
+                  {/* ig */}
+                  <motion.a 
+                      href="https://www.instagram.com/bseth.ar/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-bg-bseth-rose opacity-60 hover:opacity-100 transition-opacity"
+                      whileHover={{ y: -4, scale: 1.1 }} 
+                      whileTap={{ scale: 0.95 }}
+                  >
+                      {/* logo ig */}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                  </motion.a>
+
+                  {/* tt */}
+                  <motion.a 
+                      href="https://www.tiktok.com/@bseth.ar" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-[#EBE5CE] opacity-60 hover:opacity-100 transition-opacity"
+                      whileHover={{ y: -4, scale: 1.1 }} 
+                      whileTap={{ scale: 0.95 }}
+                  >
+                      {/* logo tt */}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+                      </svg>
+                  </motion.a>
+
+              </div>
+              <p className="absolute bottom-4 text-[13px] opacity-20 font-sans">© 2026 Bseth</p>
             </section>
 
           </div>

@@ -20,16 +20,17 @@ import imgCamara from "../assets/camara.png";
 const ITEMS_DATA = [
   // BOLSO 1 (Izquierda)
   { id: 1,  img: imgLaptop,      name: "notebook",       targetBag: 1, startX: "-6vw",  startY: "-25vh" }, 
-  { id: 2,  img: imgLibro,       name: "libro de diseño", targetBag: 1, startX: "-12vw", startY: "-20vh" },
+  { id: 2,  img: imgLibro,       name: "libros", targetBag: 1, startX: "-12vw", startY: "-20vh" },
   { id: 3,  img: imgBotella,     name: "botella de agua", targetBag: 1, startX: "-4vw",  startY: "-15vh" },
   { id: 4,  img: imgAuriculares, name: "auriculares",     targetBag: 1, startX: "-10vw", startY: "-22vh" },
   { id: 5,  img: imgKindle,      name: "kindle",          targetBag: 1, startX: "-8vw",  startY: "-28vh" },
   { id: 6,  img: imgTablet,      name: "ipad / tablet",   targetBag: 1, startX: "-14vw", startY: "-18vh" },
-  { id: 11, img: imgCuaderno,    name: "cuaderno ideas",  targetBag: 1, startX: "-9vw",  startY: "-30vh" },
+  { id: 11, img: imgCuaderno,    name: "cuaderno",  targetBag: 1, startX: "-9vw",  startY: "-30vh" },
   { id: 12, img: imgCelular,     name: "celular",         targetBag: 1, startX: "-3vw",  startY: "-12vh" },
-  { id: 13, img: imgLentes,      name: "lentes de sol",   targetBag: 1, startX: "-11vw", startY: "-16vh" },
-  { id: 14, img: imgLlaves,      name: "llaves de casa",  targetBag: 1, startX: "-7vw",  startY: "-10vh" },
+  { id: 13, img: imgLentes,      name: "lentes",   targetBag: 1, startX: "-11vw", startY: "-16vh" },
+  { id: 14, img: imgLlaves,      name: "llaves",  targetBag: 1, startX: "-7vw",  startY: "-10vh" },
   { id: 16, img: imgCamara,      name: "cámara digital",  targetBag: 1, startX: "-5vw",  startY: "-24vh" },
+
 
   // BOLSO 2 (Derecha)
   { id: 7,  img: imgLlaves,      name: "llaves",          targetBag: 2, startX: "6vw",   startY: "-20vh" },
@@ -132,7 +133,7 @@ export default function BagPacker() {
           <h2 className="font-helvetica text-3xl md:text-5xl text-bseth-cream mb-3 mix-blend-overlay opacity-90 lowercase tracking-tighter">
             modelos pensados para vos
           </h2>
-          <p className="text-2x1 md:text-sm font-helvetica text-bseth-black opacity-60 lowercase tracking-tighter">
+          <p className="text-base md:text-x2 font-helvetica text-bseth-black opacity-60 lowercase tracking-tight">
             con ayuda de las respuestas que dejen en el {" "}
             <a 
               href="https://forms.gle/gGu3howRXPYg67y66" 
