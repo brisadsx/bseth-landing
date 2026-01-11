@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 
 // --- TUS FOTOS ---
-import imgLisbeth from "../assets/lis.webp";
+import imgLisbeth from "../assets/lis.jpg";
 import imgLisbeth2 from "../assets/lis2.jpg";
 import imgLisbeth3 from "../assets/lis3.jpg";
 import imgLisbeth4 from "../assets/lis4.jpg";
@@ -120,7 +120,7 @@ export default function Narrative() {
                     <div className="mt-4 pt-2 border-t border-black/10">
                         <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">lisbeth</h4>
                         <p className="text-[13px] leading-[1.4] text-black/90 font-helvetica tracking-tight">
-                            <map name=""></map>me gusta decir ‘lis con L’ cuando voy a starbucks, también me gusta decir ‘quispe con Q’ cuando tengo que renovar la cuota del gym, pero también me gusta que me digan ‘teacher! toilet please’
+                            <map name=""></map>me gusta decir ‘lis con L’ cuando voy a starbucks, también me gusta decir ‘quispe con Q’ cuando tengo que renovar la cuota del gym, pero también me gusta que me llamen por ‘techer!’ en clases, mientras enseño no solo inglés a los jóvenes sino también lo amados y escuchados que son. Y como amo estar en la cocina, para hornear, saltear, hervir, batir, cortar y adorar.
                         </p>
                     </div>
                 </div>
