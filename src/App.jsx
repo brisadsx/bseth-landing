@@ -54,51 +54,63 @@ const ShootingBag = ({ img, index }) => {
 
 function App() {
   const [loading, setLoading] = useState(true);
-  
-  // ESTADO PARA EL CARTELITO RANDOM
   const [randomStyle, setRandomStyle] = useState(null);
+  // Estado para saber si es móvil y ajustar las coordenadas del cartelito
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // 1. Loader Logic
+    // Detectar tamaño de pantalla al inicio y al cambiar tamaño
+    const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+    };
+    handleResize(); // Chequear al montar
+    window.addEventListener('resize', handleResize);
+
+    // loader
     const timer = setTimeout(() => {
       setLoading(false);
     }, 3000); 
 
-    // 2. Random Badge Logic (INTERVALO CONSTANTE)
     const colors = [
-        { bg: "bg-[#C8A6A0]", text: "text-[#ECE4CE]" }, // Rose + Sand
-        { bg: "bg-[#8E9F6C]", text: "text-[#ECE4CE]" }, // Olive + Sand
-        { bg: "bg-[#ECE4CE]", text: "text-[#111111]" }, // Sand + Black
-        { bg: "bg-[#BAAD93]", text: "text-[#111111]" }, // Beige + Black
+        { bg: "bg-[#C8A6A0]", text: "text-[#ECE4CE]" }, 
+        { bg: "bg-[#8E9F6C]", text: "text-[#ECE4CE]" }, 
+        { bg: "bg-[#ECE4CE]", text: "text-[#111111]" }, 
+        { bg: "bg-[#BAAD93]", text: "text-[#111111]" }, 
     ];
 
-    const positions = [
-        { x: -75, y: -45, r: -5 }, // Arriba Izquierda
-        { x: 75, y: -45, r: 5 },   // Arriba Derecha
-        { x: 0, y: -60, r: 0 },    // Arriba Centro
-        { x: 85, y: 15, r: -8 },   // Abajo Derecha
-        { x: -85, y: 15, r: 8 },   // Abajo Izquierda
-    ];
+    // Usamos el estado isMobile para definir las posiciones
+    const positions = isMobile 
+        ? [ // Coordenadas MÓVIL (Más separadas para no chocar íconos grandes)
+            { x: -65, y: -75, r: -8 },
+            { x: 65, y: -75, r: 8 }, 
+            { x: 0, y: -90, r: 0 },  
+            { x: 60, y: 60, r: -12 }, 
+            { x: -60, y: 60, r: 12 }, 
+          ]
+        : [ // Coordenadas PC ORIGINALES (Tus coordenadas exactas)
+            { x: -75, y: -45, r: -5 },
+            { x: 75, y: -45, r: 5 },  
+            { x: 0, y: -60, r: 0 },   
+            { x: 85, y: 15, r: -8 },  
+            { x: -85, y: 15, r: 8 },  
+          ];
 
-    // Función para cambiar estilo
     const changeStyle = () => {
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
         const randomPos = positions[Math.floor(Math.random() * positions.length)];
-        // Agregamos un ID único (timestamp) para forzar la re-animación
         setRandomStyle({ ...randomColor, ...randomPos, id: Date.now() });
     };
 
-    // Ejecutar inmediatamente
     changeStyle();
 
-    // Ejecutar cada 2.5 segundos (puedes cambiar 2500 por 3000 si lo quieres más lento)
     const interval = setInterval(changeStyle, 2500);
 
     return () => {
         clearTimeout(timer);
-        clearInterval(interval); // Limpiamos el intervalo al salir
+        clearInterval(interval); 
+        window.removeEventListener('resize', handleResize);
     }; 
-  }, []);
+  }, [isMobile]); // Añadimos isMobile a las dependencias para que se actualice si cambia la pantalla
   // -------------------------------------
 
   const { scrollY } = useScroll();
@@ -140,7 +152,7 @@ function App() {
               <motion.div 
                 initial="hidden" animate="visible" variants={fadeIn} 
                 style={{ y: flyUp }}
-                className="relative z-10 -top-40 mb-6"
+                className="relative z-10 -top-40 md:-top-32 mb-6"
               >
                 <span className="text-xl md:text-xl font-satoshi font-light tracking-0 text-bseth-cream opacity-70">
                   te acompaña
@@ -152,7 +164,7 @@ function App() {
                 style={{ y: flyUp }}
                 className="relative z-10"
               >
-                  <img src={bsethLogo} alt="Bseth Logo" className="w-46 md:w-60 h-auto mx-auto drop-shadow-2xl"/>
+                  <img src={bsethLogo} alt="Bseth Logo" className="w-56 md:w-80 h-auto mx-auto drop-shadow-2xl"/>
               </motion.div>
 
               <motion.div 
@@ -189,15 +201,20 @@ function App() {
 
             {/* footer */}
             <section className="min-h-screen w-full bg-bseth-black flex flex-col items-center justify-center text-center text-bseth-cream p-6 relative z-20 border-t border-white/10">
-              <h2 className="text-6xl md:text-9xl font-drowner mb-10 text-bseth-cream">gracias!</h2>
               
-              <div className="max-w-2xl text-lg md:text-2xl mb-16 px-4 font-helvetica opacity-80 flex-col gap-1">
-                <p className="m-0 tracking-tight leading-tighter">esto es solo el inicio de un proyecto</p>
-                <p className="m-0 tracking-tight leading-tighter">pensado para acompañarte</p>
+              {/* Título: Gigante en móvil, original en PC */}
+              <h2 className="text-[22vw] md:text-9xl font-drowner mb-10 text-bseth-cream leading-none mt-10">
+                gracias!
+              </h2>
+              
+              {/* Texto: Más grande en móvil, original en PC */}
+              <div className="max-w-2xl text-xl md:text-2xl mb-20 px-4 font-helvetica opacity-80 flex-col gap-2">
+                <p className="m-0 tracking-tight leading-snug">esto es solo el inicio de un proyecto</p>
+                <p className="m-0 tracking-tight leading-snug">pensado para acompañarte</p>
               </div>
               
-              {/* cont icons */}
-              <div className="relative flex gap-8 mt-10 items-center justify-center">
+              {/* cont icons - Volvemos a gap-8 y mt-10 original en PC */}
+              <div className="relative flex gap-8 md:gap-8 mt-10 md:mt-10 items-center justify-center">
 
                   {randomStyle && (
                     <motion.div
@@ -210,9 +227,9 @@ function App() {
                             y: randomStyle.y, 
                             rotate: randomStyle.r 
                         }}
-                        
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={`absolute z-30 px-3 py-1.5 ${randomStyle.bg} ${randomStyle.text} font-helvetica text-xs font-medium lowercase tracking-tighter rounded-full shadow-lg pointer-events-none whitespace-nowrap`}
+                        // Cartelito: Grande en móvil (text-sm, px-4), Original chico en PC (md:text-xs, md:px-3)
+                        className={`absolute z-30 px-4 py-2 md:px-3 md:py-1.5 ${randomStyle.bg} ${randomStyle.text} font-helvetica text-sm md:text-xs font-medium lowercase tracking-tighter rounded-full shadow-lg pointer-events-none whitespace-nowrap`}
                     >
                         seguinos!
                     </motion.div>
@@ -227,8 +244,8 @@ function App() {
                       whileHover={{ y: -4, scale: 1.1 }} 
                       whileTap={{ scale: 0.95 }}
                   >
-                      {/* logo ig */}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      {/* ARREGLO CLAVE: w-8 (32px) en móvil, w-6 (24px original) en PC */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -244,14 +261,14 @@ function App() {
                       whileHover={{ y: -4, scale: 1.1 }} 
                       whileTap={{ scale: 0.95 }}
                   >
-                      {/* logo tt */}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      {/* ARREGLO CLAVE: w-8 (32px) en móvil, w-6 (24px original) en PC */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
                       </svg>
                   </motion.a>
 
               </div>
-              <p className="absolute bottom-4 text-[13px] opacity-20 font-sans">© 2026 Bseth</p>
+              <p className="absolute bottom-6 text-[13px] opacity-20 font-sans">© 2026 Bseth</p>
             </section>
 
           </div>

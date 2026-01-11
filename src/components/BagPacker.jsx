@@ -1,7 +1,6 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-// --- TUS ASSETS (Mantenemos los imports) ---
 import bolsoGrandeImg from "../assets/molde1.png"; 
 import bolsoChicoImg from "../assets/molde2.png";  
 import imgLaptop from "../assets/notebook.png"; 
@@ -16,11 +15,10 @@ import imgTablet from "../assets/tablet.png";
 import imgCuaderno from "../assets/cuaderno.png";
 import imgCamara from "../assets/camara.png";
 
-// --- DATA ---
+// data
 const ITEMS_DATA = [
-  // BOLSO 1 (Izquierda)
   { id: 1,  img: imgLaptop,      name: "notebook",       targetBag: 1, startX: "-6vw",  startY: "-25vh" }, 
-  { id: 2,  img: imgLibro,       name: "libros", targetBag: 1, startX: "-12vw", startY: "-20vh" },
+  { id: 2,  img: imgLibro,       name: "libros",         targetBag: 1, startX: "-12vw", startY: "-20vh" },
   { id: 3,  img: imgBotella,     name: "botella de agua", targetBag: 1, startX: "-4vw",  startY: "-15vh" },
   { id: 4,  img: imgAuriculares, name: "auriculares",     targetBag: 1, startX: "-10vw", startY: "-22vh" },
   { id: 5,  img: imgKindle,      name: "kindle",          targetBag: 1, startX: "-8vw",  startY: "-28vh" },
@@ -31,16 +29,14 @@ const ITEMS_DATA = [
   { id: 14, img: imgLlaves,      name: "llaves",  targetBag: 1, startX: "-7vw",  startY: "-10vh" },
   { id: 16, img: imgCamara,      name: "cámara digital",  targetBag: 1, startX: "-5vw",  startY: "-24vh" },
 
-
-  // BOLSO 2 (Derecha)
-  { id: 7,  img: imgLlaves,      name: "llaves",          targetBag: 2, startX: "6vw",   startY: "-20vh" },
-  { id: 8,  img: imgLentes,      name: "lentes",          targetBag: 2, startX: "10vw",  startY: "-15vh" },   
+  { id: 7,  img: imgLlaves,           name: "llaves",          targetBag: 2, startX: "6vw",   startY: "-20vh" },
+  { id: 8,  img: imgLentes,           name: "lentes",          targetBag: 2, startX: "10vw",  startY: "-15vh" },   
   { id: 9,  img: imgCelular,     name: "celular",          targetBag: 2, startX: "4vw",   startY: "-25vh" },
   { id: 10, img: imgLibro,       name: "libro bolsillo",  targetBag: 2, startX: "8vw",   startY: "-18vh" },
   { id: 15, img: imgCamara,      name: "cámara compacta", targetBag: 2, startX: "12vw",  startY: "-22vh" }, 
 ];
 
-// Componente de Lista (Texto)
+// --- comp pc ---
 const ListItem = ({ item, scrollYProgress, align }) => {
   const globalIndex = ITEMS_DATA.findIndex(i => i.id === item.id);
   const trigger = 0.1 + (globalIndex * 0.02); 
@@ -49,9 +45,7 @@ const ListItem = ({ item, scrollYProgress, align }) => {
   const x = useTransform(scrollYProgress, [trigger, trigger + 0.05], [align === "left" ? 10 : -10, 0]);
 
   return (
-    // CAMBIO 1: Eliminé el padding vertical (py-[2px]) para pegar las líneas
     <motion.div style={{ opacity, x }} className="relative block"> 
-      {/* CAMBIO 2: leading-[0.85] junta las líneas drásticamente */}
       <span className="font-sans font-medium text-[17px] text-bseth-black lowercase tracking-tight leading-[0.85] opacity-80 block">
         {item.name}
       </span>
@@ -59,36 +53,65 @@ const ListItem = ({ item, scrollYProgress, align }) => {
   );
 };
 
-const ItemList = ({ items, scrollYProgress, align }) => {
+// --- comp lista ---
+const MobileListItem = ({ item }) => {
+    return (
+      <div className="relative block"> 
+        <span className="font-sans font-medium text-[13px] text-bseth-black lowercase tracking-tight leading-[1] opacity-80 block">
+          {item.name}
+        </span>
+      </div>
+    );
+};
+
+const ItemList = ({ items, scrollYProgress, align, isMobile = false }) => {
   return (
-    // CAMBIO 3: gap-0 o gap-[1px] para asegurar compacidad
     <div className={`flex flex-col gap-0 ${align === "left" ? "text-right items-end" : "text-left items-start"}`}>
       {items.map((item) => (
-        <ListItem 
-          key={item.id} 
-          item={item} 
-          scrollYProgress={scrollYProgress} 
-          align={align} 
-        />
+         isMobile ? (
+            <MobileListItem key={item.id} item={item} />
+         ) : (
+            <ListItem 
+                key={item.id} 
+                item={item} 
+                scrollYProgress={scrollYProgress} 
+                align={align} 
+            />
+         )
       ))}
     </div>
   );
 };
 
-// Componente Volador
-const FlyingObject = ({ item, scrollYProgress }) => {
-  const targetCoords = {
-    1: { x: "-18vw", y: "8vh" },
-    2: { x: "18vw", y: "10vh" },
+// --- comp obj  ---
+const FlyingObject = ({ item, scrollYProgress, isMobile }) => {
+  
+  // 1. target (bolso)
+  const targetCoords = isMobile ? {
+
+      1: { x: "22vw", y: "-18vh" }, 
+      2: { x: "-22vw", y: "18vh" },
+  } : {
+      1: { x: "-18vw", y: "8vh" },
+      2: { x: "18vw", y: "10vh" },
   };
 
   const target = targetCoords[item.targetBag];
+
+  // 2. start (animacion)
+  const mobileStartX = item.targetBag === 1 
+      ? "-40vw" 
+      : "40vw"; 
+
+  const startX = isMobile ? mobileStartX : item.startX;
+  const startY = isMobile ? (item.targetBag === 1 ? "-30vh" : "30vh") : item.startY;
+
   const index = ITEMS_DATA.indexOf(item);
   const startTrigger = 0.05 + (index * 0.025); 
   const endTrigger = startTrigger + 0.3; 
 
-  const x = useTransform(scrollYProgress, [startTrigger, endTrigger], [item.startX, target.x]);
-  const y = useTransform(scrollYProgress, [startTrigger, endTrigger], [item.startY, target.y]);
+  const x = useTransform(scrollYProgress, [startTrigger, endTrigger], [startX, target.x]);
+  const y = useTransform(scrollYProgress, [startTrigger, endTrigger], [startY, target.y]);
   
   const opacityIn = useTransform(scrollYProgress, [startTrigger, startTrigger + 0.05], [0, 1]);
   const opacityOut = useTransform(scrollYProgress, [endTrigger - 0.05, endTrigger], [1, 0]);
@@ -117,6 +140,14 @@ const FlyingObject = ({ item, scrollYProgress }) => {
 
 export default function BagPacker() {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -124,12 +155,12 @@ export default function BagPacker() {
   });
 
   return (
-    <section ref={containerRef} className="relative h-[400vh] bg-bseth-olive">
+    <section ref={containerRef} className="relative h-[250vh] md:h-[400vh] bg-bseth-olive">
       
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4">
         
-        {/* TITULO */}
-        <div className="absolute top-10 md:top-20 z-40 text-center w-full">
+        {/* titulo */}
+        <div className="absolute top-0 md:top-20 z-40 text-center w-full pt-24 md:pt-0">
           <h2 className="font-helvetica text-3xl md:text-5xl text-bseth-cream mb-3 mix-blend-overlay opacity-90 lowercase tracking-tighter">
             modelos pensados para vos
           </h2>
@@ -146,62 +177,97 @@ export default function BagPacker() {
           </p>
         </div>
 
-        {/* ESCENARIO PRINCIPAL */}
-        <div className="relative w-full max-w-7xl flex items-center justify-center h-[60vh] mt-10">
+        {/* cont central */}
+        <div className="relative w-full max-w-7xl flex flex-col md:flex-row items-center justify-center h-[60vh] mt-10 md:mt-0">
 
-            {/* LISTA IZQUIERDA: Añadí pr-12 para separarla del centro */}
-            <div className="w-1/3 hidden md:flex flex-col justify-center h-full pr-12 md:pr-20">
-               <ItemList 
-                  items={ITEMS_DATA.filter(i => i.targetBag === 1)} 
-                  scrollYProgress={scrollYProgress} 
-                  align="left"
-               />
-            </div>
-
-            {/* CENTRO: BOLSOS Y OBJETOS VOLADORES */}
-            <div className="relative w-1/3 flex items-center justify-center h-full">
-                
+            <div className="absolute inset-0 pointer-events-none z-50">
                 {ITEMS_DATA.map((item) => (
                   <FlyingObject 
                     key={item.id} 
                     item={item} 
                     scrollYProgress={scrollYProgress} 
+                    isMobile={isMobile}
                   />
                 ))}
+            </div>
 
-                {/* BOLSOS */}
-                <div className="relative z-10 flex gap-12 md:gap-32 items-end translate-y-16">
-                    <motion.img 
-                        src={bolsoGrandeImg} 
-                        alt="Bolso Grande" 
-                        decoding="async"
-                        className="w-36 md:w-60 h-auto drop-shadow-2xl object-contain will-change-transform"
-                        animate={{ y: [0, -10, 0] }}
-                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            {/* pc */}
+            {/* ======================================================= */}
+            <div className="hidden md:flex w-full h-full items-center justify-center">
+                <div className="w-1/3 flex flex-col justify-center h-full pr-12 md:pr-20">
+                    <ItemList 
+                        items={ITEMS_DATA.filter(i => i.targetBag === 1)} 
+                        scrollYProgress={scrollYProgress} 
+                        align="left"
                     />
+                </div>
 
-                    <motion.img 
-                        src={bolsoChicoImg} 
-                        alt="Bolso Chico" 
-                        decoding="async"
-                        className="w-28 md:w-44 h-auto drop-shadow-2xl object-contain will-change-transform"
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                <div className="relative w-1/3 flex items-center justify-center h-full">
+                    <div className="relative z-10 flex gap-12 md:gap-32 items-end translate-y-16">
+                        <motion.img 
+                            src={bolsoGrandeImg} alt="Bolso Grande" decoding="async"
+                            className="w-36 md:w-60 h-auto drop-shadow-2xl object-contain"
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                        <motion.img 
+                            src={bolsoChicoImg} alt="Bolso Chico" decoding="async"
+                            className="w-28 md:w-44 h-auto drop-shadow-2xl object-contain"
+                            animate={{ y: [0, -8, 0] }}
+                            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                        />
+                    </div>
+                </div>
+
+                <div className="w-1/3 flex flex-col justify-center h-full pl-24 md:pl-32">
+                    <ItemList 
+                        items={ITEMS_DATA.filter(i => i.targetBag === 2)} 
+                        scrollYProgress={scrollYProgress} 
+                        align="right"
                     />
                 </div>
             </div>
 
-            {/* LISTA DERECHA */}
-            {/* CAMBIO 4: Añadí pl-24 (mucho padding) para empujar la lista a la derecha lejos del bolso */}
-            <div className="w-1/3 hidden md:flex flex-col justify-center h-full pl-24 md:pl-32">
-               <ItemList 
-                  items={ITEMS_DATA.filter(i => i.targetBag === 2)} 
-                  scrollYProgress={scrollYProgress} 
-                  align="right"
-               />
+            {/* celular */}
+            {/* ======================================================= */}
+            <div className="flex md:hidden flex-col w-full h-[65vh] justify-center mt-20 gap-16 relative z-10">
+                
+                <div className="flex items-center justify-between w-full px-2">
+                    <div className="w-1/2 flex justify-end pr-4">
+                        <ItemList 
+                            items={ITEMS_DATA.filter(i => i.targetBag === 1)} 
+                            align="left"
+                            isMobile={true}
+                        />
+                    </div>
+                    <div className="w-1/2 flex justify-center">
+                        <img 
+                            src={bolsoGrandeImg} alt="Bolso Grande" 
+                            className="w-[35vw] max-w-[150px] h-auto drop-shadow-xl"
+                        />
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-between w-full px-2">
+                    <div className="w-1/2 flex justify-center">
+                        <img 
+                            src={bolsoChicoImg} alt="Bolso Chico" 
+                            className="w-[28vw] max-w-[120px] h-auto drop-shadow-xl"
+                        />
+                    </div>
+                    <div className="w-1/2 flex justify-start pl-4">
+                        <ItemList 
+                            items={ITEMS_DATA.filter(i => i.targetBag === 2)} 
+                            align="right"
+                            isMobile={true}
+                        />
+                    </div>
+                </div>
+
             </div>
 
         </div>
+
       </div>
     </section>
   );
