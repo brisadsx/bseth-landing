@@ -110,7 +110,7 @@ function App() {
         clearInterval(interval); 
         window.removeEventListener('resize', handleResize);
     }; 
-  }, [isMobile]); // Añadimos isMobile a las dependencias para que se actualice si cambia la pantalla
+  }, [isMobile]); 
   // -------------------------------------
 
   const { scrollY } = useScroll();
@@ -202,18 +202,16 @@ function App() {
             {/* footer */}
             <section className="min-h-screen w-full bg-bseth-black flex flex-col items-center justify-center text-center text-bseth-cream p-6 relative z-20 border-t border-white/10">
               
-              {/* Título: Gigante en móvil, original en PC */}
               <h2 className="text-[22vw] md:text-9xl font-drowner mb-10 text-bseth-cream leading-none mt-10">
                 gracias!
               </h2>
               
-              {/* Texto: Más grande en móvil, original en PC */}
-              <div className="max-w-2xl text-xl md:text-2xl mb-20 px-4 font-helvetica opacity-80 flex-col gap-2">
-                <p className="m-0 tracking-tight leading-snug">esto es solo el inicio de un proyecto</p>
-                <p className="m-0 tracking-tight leading-snug">pensado para acompañarte</p>
+              <div className="max-w-2xl text-xl md:text-2xl mb-20 px-4 font-helvetica opacity-80 flex-col gap-0">
+                <p className="m-0 tracking-tight leading-none">esto es solo el inicio de un proyecto</p>
+                <p className="m-0 tracking-tight leading-none">pensado para acompañarte</p>
               </div>
               
-              {/* cont icons - Volvemos a gap-8 y mt-10 original en PC */}
+              {/* cont icons */}
               <div className="relative flex gap-8 md:gap-8 mt-10 md:mt-10 items-center justify-center">
 
                   {randomStyle && (

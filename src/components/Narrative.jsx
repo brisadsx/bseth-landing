@@ -120,15 +120,12 @@ export default function Narrative() {
                     <div className="mt-4 pt-2 border-t border-black/10">
                         <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">lisbeth</h4>
                         <p className="text-[13px] leading-[1.4] text-black/90 font-helvetica tracking-tight">
-                            <map name=""></map>me gusta decir ‘lis con L’ cuando voy a starbucks, también me gusta decir ‘quispe con Q’ cuando tengo que renovar la cuota del gym, pero también me gusta que me llamen por ‘techer!’ en clases, mientras enseño no solo inglés a los jóvenes sino también lo amados y escuchados que son. Y como amo estar en la cocina, para hornear, saltear, hervir, batir, cortar y adorar.
+                            <map name=""></map>me gusta decir ‘Lis con L’ cuando voy a Starbucks, también me gusta decir ‘Quispe con Q’ cuando tengo que renovar la cuota del gym. pero más me gusta que me digan ‘teacher!’ en clases, mientras enseño no solo inglés a los jóvenes, sino también lo amados y escuchados que son. y cómo amo estar en la cocina para hornear, saltear, hervir, batir, cortar y adorar.
                         </p>
                     </div>
                 </div>
             </div>
 
-
-            {/* ============================================== */}
-            {/* PÁGINA DERECHA */}
             {/* ============================================== */}
             <div className="grid grid-cols-12 gap-3 content-start px-2 md:px-8">
                 
@@ -150,7 +147,6 @@ export default function Narrative() {
                     </p>
                 </div>
 
-                {/* BLOQUE MEDIO: VIDEO OPTIMIZADO */}
                 <div className="col-span-12 flex justify-end py-2">
                      <div className="w-[60%] aspect-[16/9] relative bg-[#E5E0C8]">
                         <video 
@@ -159,13 +155,12 @@ export default function Narrative() {
                             muted 
                             loop 
                             playsInline 
-                            preload="none" // No descarga nada hasta que sea visible
+                            preload="none" 
                             className="absolute inset-0 w-full h-full object-cover" 
                         />
                      </div>
                 </div>
 
-                {/* BLOQUE INFERIOR */}
                 <div className="col-span-6 aspect-[4/3] relative mt-1 bg-[#E5E0C8]">
                     <img 
                         src={imgBrisa2} 
