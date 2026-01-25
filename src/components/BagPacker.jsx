@@ -160,21 +160,23 @@ export default function BagPacker() {
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4">
         
         {/* titulo */}
-        <div className="absolute top-0 md:top-20 z-40 text-center w-full pt-24 md:pt-0">
-          <h2 className="font-helvetica text-3xl md:text-5xl text-bseth-cream mb-3 mix-blend-overlay opacity-90 lowercase tracking-tighter">
+        <div className="absolute top-0 md:top-20 z-40 text-center w-full pt-24 md:pt-0 px-4">
+          <h2 className="font-helvetica text-3xl md:text-5xl text-bseth-cream mb-1 mix-blend-overlay opacity-90 lowercase tracking-tighter">
             modelos pensados para vos
           </h2>
-          <p className="text-base md:text-x2 font-helvetica text-bseth-black opacity-60 lowercase tracking-tight">
-            con ayuda de las respuestas que dejen en el {" "}
+          
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 text-sm md:text-lg font-helvetica text-bseth-black opacity-90 lowercase tracking-tight">
+            <span>con ayuda de las respuestas que dejen en el</span>
+            
             <a 
               href="https://forms.gle/gGu3howRXPYg67y66" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="underline decoration-1 underline-offset-2 hover:opacity-50 transition-opacity cursor-pointer"
+              className="bg-bseth-cream text-bseth-black px-3 py-0.5 rounded-full font-medium text-xs md:text-sm hover:scale-105 transition-transform duration-200 shadow-sm border border-black/5"
             >
-            formulario
+              formulario 
             </a>
-          </p>
+          </div>
         </div>
 
         {/* cont central */}

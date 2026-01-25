@@ -6,7 +6,8 @@ import BookScroll from './components/BookScroll';
 import Narrative from './components/Narrative';
 import BagPacker from './components/BagPacker';
 import DecryptedText from './components/DecryptedText'; 
-import Loader from './components/Loader'; 
+import Loader from './components/Loader';
+import Newsletter from './components/Newsletter'; 
 
 import bsethLogo from './assets/lgbseth.png'; 
 
@@ -198,6 +199,8 @@ function App() {
             <div className="relative z-20 border-t border-white/10">
               <BagPacker />
             </div>
+
+            <Newsletter />
 
             {/* footer */}
             <section className="min-h-screen w-full bg-bseth-black flex flex-col items-center justify-center text-center text-bseth-cream p-6 relative z-20 border-t border-white/10">
