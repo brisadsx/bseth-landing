@@ -1,22 +1,13 @@
 /* eslint-disable no-undef */
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
-
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(request, response) {
-
-  console.log("------------------------------------------------");
-  console.log("🔍 DIAGNÓSTICO DE VARIABLES:");
-  console.log("API KEY:", process.env.RESEND_API_KEY ? "✅ Cargada correctamente" : "❌ FALTA (Es undefined)");
-  console.log("AUDIENCE ID:", process.env.RESEND_AUDIENCE_ID ? "✅ Cargada correctamente" : "❌ FALTA (Es undefined)");
-  console.log("------------------------------------------------");
-
-
+  // ors
   response.setHeader('Access-Control-Allow-Credentials', true);
-  response.setHeader('Access-Control-Allow-Origin', '*');
+
+  response.setHeader('Access-Control-Allow-Origin', 'https://bseth-intro.vercel.app'); 
   response.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   response.setHeader(
     'Access-Control-Allow-Headers',
@@ -28,20 +19,36 @@ export default async function handler(request, response) {
   }
 
   try {
-    const { email } = request.body;
+    const { email, turnstileToken } = request.body; // Recibimos el token
     
-    if (!email) {
-      return response.status(400).json({ error: 'Falta el email' });
+    if (!email || !turnstileToken) {
+      return response.status(400).json({ error: 'Faltan datos (email o token de seguridad)' });
     }
 
+    // token verification with Cloudflare Turnstile
+    const formData = new URLSearchParams();
+    formData.append('secret', process.env.TURNSTILE_SECRET_KEY);
+    formData.append('response', turnstileToken);
+
+    const cfVerify = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: formData,
+    });
+    
+    const cfData = await cfVerify.json();
+
+    if (!cfData.success) {
+      return response.status(403).json({ error: 'Validación de seguridad fallida (Bot detectado)' });
+    }
+
+    // si es válido, guardamos el email en Resend
     const data = await resend.contacts.create({
       email: email,
-      firstName: '',
       unsubscribed: false,
-      audienceId:process.env.RESEND_AUDIENCE_ID,
+      audienceId: process.env.RESEND_AUDIENCE_ID,
     });
 
-    return response.status(200).json({ message: 'Email guardado', data });
+    return response.status(200).json({ message: 'Email guardado exitosamente', data });
   } catch (error) {
     console.error(error);
     return response.status(500).json({ error: error.message });

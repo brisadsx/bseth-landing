@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Turnstile } from '@marsidev/react-turnstile'; //
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [status, setStatus] = useState('idle');
+  const [turnstileToken, setTurnstileToken] = useState(''); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) return;
+    
+    if (!email || !turnstileToken) return; 
     
     setStatus('loading');
 
@@ -15,7 +18,8 @@ export default function Newsletter() {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        
+        body: JSON.stringify({ email, turnstileToken }), 
       });
 
       if (res.ok) {
@@ -35,8 +39,6 @@ export default function Newsletter() {
   return (
     <section className="bg-bseth-black py-32 px-4 border-t border-white/5 relative z-50 overflow-hidden">
       <div className="max-w-xl mx-auto text-center relative">
-        
-        {/* títulos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -46,92 +48,90 @@ export default function Newsletter() {
           <h3 className="font-helvetica text-2xl md:text-4xl text-bseth-cream mb-3 lowercase tracking-tighter">
             bseth list
           </h3>
-          {/*  */}
           <p className="text-white/50 text-sm md:text-base mb-10 font-sans font-light tracking-wide lowercase">
             acceso anticipado al drop 001.
           </p>
         </motion.div>
 
-        {/* msj de éxito */}
-        <div className="h-20 relative"> 
+        <div className="h-auto relative"> 
           <AnimatePresence mode="wait">
-            
             {status === 'success' ? (
               <motion.div
                 key="success"
                 initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex flex-col items-center justify-center h-full"
+                className="flex flex-col items-center justify-center h-20"
               >
                 <p className="text-[#E4E4D0] font-sans text-lg tracking-tight flex items-center gap-2 lowercase">
                   <span className="text-xl">💌</span> ¡listo! ya estás adentro.
                 </p>
               </motion.div>
             ) : (
-              <motion.form
-                key="form"
-                onSubmit={handleSubmit}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, filter: "blur(5px)" }}
-                className="flex flex-col md:flex-row gap-2 max-w-sm mx-auto"
-              >
-                {/* input */}
-                <div className="relative flex-1 group">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="tu email"
-                    required
-                    disabled={status === 'loading'}
-                    className={`
-                      w-full bg-transparent border-b border-white/20 
-                      px-0 py-3 text-center md:text-left text-bseth-cream 
-                      placeholder-white/20 focus:outline-none focus:border-bseth-cream/80 
-                      transition-all duration-300 font-sans text-sm lowercase tracking-wide
-                      ${status === 'error' ? 'border-red-400 text-red-100' : ''}
-                    `}
-                  />
-                  <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-bseth-cream transition-all duration-500 group-focus-within:w-full" />
-                </div>
-                
-                {/*  */}
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="mt-4 md:mt-0 md:ml-2 px-6 py-2 rounded-full border border-white/10 hover:border-white/40 hover:bg-white/5 text-bseth-cream text-xs lowercase tracking-widest transition-all disabled:opacity-50"
+              <motion.div key="form-container">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col md:flex-row gap-2 max-w-sm mx-auto mb-4"
                 >
-                  {status === 'loading' ? (
-                    <motion.div 
-                      animate={{ rotate: 360 }} 
-                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                      className="w-4 h-4 border-t-2 border-white rounded-full mx-auto"
+                  <div className="relative flex-1 group">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="tu email"
+                      required
+                      disabled={status === 'loading'}
+                      className={`
+                        w-full bg-transparent border-b border-white/20 
+                        px-0 py-3 text-center md:text-left text-bseth-cream 
+                        placeholder-white/20 focus:outline-none focus:border-bseth-cream/80 
+                        transition-all duration-300 font-sans text-sm lowercase tracking-wide
+                        ${status === 'error' ? 'border-red-400 text-red-100' : ''}
+                      `}
                     />
-                  ) : (
-                    '→'
-                  )}
-                </button>
-              </motion.form>
+                    <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-bseth-cream transition-all duration-500 group-focus-within:w-full" />
+                  </div>
+                  
+                  <button
+                    type="submit"
+                    disabled={status === 'loading' || !turnstileToken}
+                    className="mt-4 md:mt-0 md:ml-2 px-6 py-2 rounded-full border border-white/10 hover:border-white/40 hover:bg-white/5 text-bseth-cream text-xs lowercase tracking-widest transition-all disabled:opacity-50"
+                  >
+                    {status === 'loading' ? (
+                      <motion.div 
+                        animate={{ rotate: 360 }} 
+                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                        className="w-4 h-4 border-t-2 border-white rounded-full mx-auto"
+                      />
+                    ) : ( '→' )}
+                  </button>
+                </form>
+
+                {/* Widget de Turnstile: reemplaza con tu Site Key */}
+                <div className="flex justify-center scale-90 opacity-80">
+                  <Turnstile 
+                    siteKey="TU_SITE_KEY_PUBLICA" 
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    options={{ theme: 'dark' }}
+                  />
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* mensaje de error */}
         <AnimatePresence>
           {status === 'error' && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute -bottom-8 left-0 right-0 text-red-400/80 text-[10px] lowercase tracking-widest font-sans"
+              className="mt-4 text-red-400/80 text-[10px] lowercase tracking-widest font-sans"
             >
               algo salió mal. intentá de nuevo.
             </motion.p>
           )}
         </AnimatePresence>
-
       </div>
     </section>
   );
