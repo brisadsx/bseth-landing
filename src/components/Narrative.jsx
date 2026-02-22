@@ -142,9 +142,9 @@ export default function Narrative() {
                 
                 <div className="col-span-5 flex flex-col justify-end pb-2 pl-3">
                     <h4 className="font-helvetica text-[13px] mb-1 text-black tracking-tight">brisa</h4>
-                    <p className="text-[13px] leading-[1.4] text-left text-black/80 font-helvetica tracking-tight">
-                       amo leer, amo la música, amo el arte, amo la moda, amo el amor, amo el conocimiento y a los animales.<p>estudio ingeniería informática, construyo software y experiencias digitales impulsadas por la curiosidad, la creatividad y la funcionalidad.</p> 
-                    </p>
+                    <div className="text-[13px] leading-[1.4] text-left text-black/80 font-helvetica tracking-tight">
+                       amo leer, amo la música, amo el arte, amo la moda, amo el amor, amo el conocimiento y a los animales.<p className="mt-2">estudio ingeniería informática, construyo software y experiencias digitales impulsadas por la curiosidad, la creatividad y la funcionalidad.</p> 
+                    </div>
                 </div>
 
                 <div className="col-span-12 flex justify-end py-2">

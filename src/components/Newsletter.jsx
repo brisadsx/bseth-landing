@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 import { Turnstile } from '@marsidev/react-turnstile';
 
 export default function Newsletter() {
@@ -113,7 +114,7 @@ export default function Newsletter() {
 
                 <div className="flex justify-center scale-90 opacity-80">
                   <Turnstile 
-                    siteKey="TU_SITE_KEY_PUBLICA" 
+                    siteKey="0x4AAAAAACgT4WjOOqFk7jVu" 
                     onSuccess={(token) => setTurnstileToken(token)}
                     options={{ theme: 'dark' }}
                   />
