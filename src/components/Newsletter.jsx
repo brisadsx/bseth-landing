@@ -1,16 +1,15 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Turnstile } from '@marsidev/react-turnstile'; //
+import { AnimatePresence } from 'framer-motion';
+import { Turnstile } from '@marsidev/react-turnstile';
 
 export default function Newsletter() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
-  const [turnstileToken, setTurnstileToken] = useState(''); 
+  const [turnstileToken, setTurnstileToken] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!email || !turnstileToken) return; 
+    if (!email || !turnstileToken) return;
     
     setStatus('loading');
 
@@ -18,8 +17,7 @@ export default function Newsletter() {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        
-        body: JSON.stringify({ email, turnstileToken }), 
+        body: JSON.stringify({ email, turnstileToken }),
       });
 
       if (res.ok) {
@@ -39,6 +37,7 @@ export default function Newsletter() {
   return (
     <section className="bg-bseth-black py-32 px-4 border-t border-white/5 relative z-50 overflow-hidden">
       <div className="max-w-xl mx-auto text-center relative">
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -68,7 +67,12 @@ export default function Newsletter() {
                 </p>
               </motion.div>
             ) : (
-              <motion.div key="form-container">
+              <motion.div 
+                key="form-container"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 <form
                   onSubmit={handleSubmit}
                   className="flex flex-col md:flex-row gap-2 max-w-sm mx-auto mb-4"
@@ -107,7 +111,6 @@ export default function Newsletter() {
                   </button>
                 </form>
 
-                {/* Widget de Turnstile: reemplaza con tu Site Key */}
                 <div className="flex justify-center scale-90 opacity-80">
                   <Turnstile 
                     siteKey="TU_SITE_KEY_PUBLICA" 
